@@ -22,8 +22,10 @@ public class Turret : MonoBehaviour
 
     private void Update()
     {
-        if(m_RefireTimer > 0)
+        if (m_RefireTimer >= 0)
             m_RefireTimer -= Time.deltaTime;
+        else if (m_Mode == TurretMode.Auto)
+            Fire();
     }
 
     // Public API
@@ -33,9 +35,12 @@ public class Turret : MonoBehaviour
 
         if (m_RefireTimer > 0) return;
 
-        if (m_Ship.DrawEnergy(m_TurretProperties.EnergyUsage) == false) return;
+        if(m_Ship != null)
+        {
+            if (m_Ship.DrawEnergy(m_TurretProperties.EnergyUsage) == false) return;
 
-        if (m_Ship.DrawAmmo(m_TurretProperties.AmmoUsage) == false) return;
+            if (m_Ship.DrawAmmo(m_TurretProperties.AmmoUsage) == false) return;
+        }        
 
         Projectile projectile = Instantiate(m_TurretProperties.ProjectilePrefab).GetComponent<Projectile>();
         projectile.transform.position = transform.position;

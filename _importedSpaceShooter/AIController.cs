@@ -77,7 +77,7 @@ public class AIController : MonoBehaviour
         {
             if(m_SelectedTarget != null)
             {
-                m_MovePosition = MakeLead(m_SelectedTarget); //m_SelectedTarget.transform.position;  
+                m_MovePosition = m_SelectedTarget.transform.position;  
             }
             else
             {
@@ -87,13 +87,7 @@ public class AIController : MonoBehaviour
 
                     if(isInsidePatrolZone == true)
                     {
-                        if (m_RandomizeDirectionTimer.IsFinished)
-                        {
-                            Vector2 newPoint = UnityEngine.Random.onUnitSphere * m_PatrolArea.Radius + m_PatrolArea.transform.position;
-                            m_MovePosition = newPoint;
-
-                            m_RandomizeDirectionTimer.Start(m_RandomSelectMovePointTime);
-                        }
+                        GetNewPoint();
                     }
                     else
                     {
@@ -109,7 +103,18 @@ public class AIController : MonoBehaviour
         }
     }
 
-    private void PatrolPointSwitch()
+    protected virtual void GetNewPoint()
+    {
+        if (m_RandomizeDirectionTimer.IsFinished)
+        {
+            Vector2 newPoint = UnityEngine.Random.onUnitSphere * m_PatrolArea.Radius + m_PatrolArea.transform.position;
+            m_MovePosition = newPoint;
+
+            m_RandomizeDirectionTimer.Start(m_RandomSelectMovePointTime);
+        }
+    }
+
+    protected virtual void PatrolPointSwitch()
     {
         if(m_PatrolPoints != null)
         {
@@ -245,6 +250,7 @@ public class AIController : MonoBehaviour
         m_AIBehavior = AIBehavior.PatrolArea;
         m_PatrolArea = point;
     }
+    
 
     #region Timers
 

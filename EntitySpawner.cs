@@ -18,7 +18,7 @@ public class EntitySpawner : MonoBehaviour
 
     private float m_Timer;
 
-    [SerializeField] private AIPatrolArea moveTarget;
+    [SerializeField] private Path path;
 
     private void Start()
     {
@@ -51,9 +51,9 @@ public class EntitySpawner : MonoBehaviour
             GameObject e = Instantiate(m_EntityPrefab[index].gameObject);
             e.transform.position = m_Area.GetRandomInsideZone();
 
-            if(e.TryGetComponent<AIController>(out var ai))
+            if(e.TryGetComponent<TDPatrolController>(out var ai))
             {
-                ai.SetPatrolBehaviour(moveTarget);
+                ai.SetPath(path);
             }
         }
     }
