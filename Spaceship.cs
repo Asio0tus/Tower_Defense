@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,8 @@ public class Spaceship : Destructible
     /// Rotating force
     /// </summary>
     [SerializeField] private float m_Mobility;
+
+    
 
     /// <summary>
     /// Max line speed
@@ -194,6 +197,13 @@ public class Spaceship : Destructible
     public void Fire(TurretMode mode)
     {
         return;
+    }
+
+
+    public void Use(EnemyAsset asset)
+    {
+        m_MaxLinearVelocity = asset.moveSpeed;
+        base.Use(asset);
     }
 
 }
