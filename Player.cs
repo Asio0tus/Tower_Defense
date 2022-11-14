@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine;
 public class Player : SingletonBase<Player>
 {
     [SerializeField] private int m_NumLives;
+    public int Health => m_NumLives;
+
     [SerializeField] private Spaceship m_Ship;
     [SerializeField] private GameObject m_PlayerShipPrefab;
 
@@ -15,7 +18,8 @@ public class Player : SingletonBase<Player>
 
     private void Start()
     {
-        m_Ship.EventOnDeath.AddListener(OnShipDeath);
+        if(m_Ship) 
+            m_Ship.EventOnDeath.AddListener(OnShipDeath);
     }
 
     private void OnShipDeath()
@@ -37,6 +41,17 @@ public class Player : SingletonBase<Player>
         //m_MovementController.SetTargetShip(m_Ship);
 
     }
+
+    protected void TakeDamage(int damage)
+    {
+        m_NumLives -= damage;
+
+        if(m_NumLives <= 0)
+        {
+            LevelSequenceController.Instance.FinishCurrentLevel(false);
+        }
+    }
+        
 
     #region Score
 

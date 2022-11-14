@@ -19,4 +19,6 @@ public sealed class EnemyAsset : ScriptableObject
     public int hitpoints = 10;
     public int score = 10;
     public float colliderRadius = 0.28f;
+    public int damage = 1;
+    public int gold = 1;
 }

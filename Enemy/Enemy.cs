@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(TDPatrolController))]
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private int damage = 1;
+    [SerializeField] private int gold = 1;
+
     public void Use(EnemyAsset asset)
     {
         var sr = transform.Find("Sprite").GetComponent<SpriteRenderer>();
@@ -18,6 +21,19 @@ public class Enemy : MonoBehaviour
 
         var col = GetComponentInChildren<CircleCollider2D>();
         col.radius = asset.colliderRadius;
+
+        damage = asset.damage;
+        gold = asset.gold;
+    }
+
+    public void DamagePlayer()
+    {
+        TDPlayer.Instance.ChangeHealth(damage);
+    }
+
+    public void GivePlayerGold()
+    {
+        TDPlayer.Instance.ChangeGold(gold);
     }
 
 #if UNITY_EDITOR

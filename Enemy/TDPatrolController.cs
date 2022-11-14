@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TDPatrolController : AIController
 {
     private Path path;
     private int pathIndex;
 
+    [SerializeField] private UnityEvent OnEndPath;
     
     public void SetPath(Path newPath)
     {       
@@ -21,11 +23,11 @@ public class TDPatrolController : AIController
 
         if (path.Length > pathIndex)
         {
-            SetPatrolBehaviour(path[pathIndex]);
-            Debug.Log(pathIndex);
+            SetPatrolBehaviour(path[pathIndex]);            
         }
         else
         {
+            OnEndPath.Invoke();
             Destroy(gameObject);
         }
     }
