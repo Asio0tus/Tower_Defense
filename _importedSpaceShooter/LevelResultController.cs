@@ -23,18 +23,18 @@ public class LevelResultController : SingletonBase<LevelResultController>
     /// <param name="result"></param>
     public void Show(bool result)
     {
-        if (result)
+        /*if (result)
         {
             UpdateCurrentLevelStats();
             UpdateVisualStats();
-        }
+        }*/
 
         m_PanelSuccess?.gameObject.SetActive(result);
         m_PanelFailure?.gameObject.SetActive(!result);
     }
 
     /// <summary>
-    /// Запускаем следующий уровен. Дергается эвентом с кнопки play next.
+    /// Запускаем следующий уровень. Дергается эвентом с кнопки play next.
     /// </summary>
     public void OnPlayNext()
     {

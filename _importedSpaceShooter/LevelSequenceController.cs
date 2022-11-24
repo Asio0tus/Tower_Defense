@@ -42,7 +42,8 @@ public class LevelSequenceController : SingletonBase<LevelSequenceController>
     /// </summary>
     public void RestartLevel()
     {
-        SceneManager.LoadScene(CurrentEpisode.Levels[CurrentLevel]);
+        //SceneManager.LoadScene(CurrentEpisode.Levels[CurrentLevel]);
+        SceneManager.LoadScene(CurrentLevel);
     }
 
     /// <summary>

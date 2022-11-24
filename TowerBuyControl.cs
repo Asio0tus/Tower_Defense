@@ -38,5 +38,10 @@ public class TowerBuyControl : MonoBehaviour
         Debug.Log("buy tower");
     }
 
+    public void SetBuildSite(Transform buildSiteTransform)
+    {
+        buildSite = buildSiteTransform;
+    }
+
     
 }

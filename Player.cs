@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : SingletonBase<Player>
 {
     [SerializeField] private int m_NumLives;
     public int Health => m_NumLives;
+
+    public event Action OnPlayerDead;
 
     [SerializeField] private Spaceship m_Ship;
     [SerializeField] private GameObject m_PlayerShipPrefab;
@@ -42,13 +45,17 @@ public class Player : SingletonBase<Player>
 
     }
 
+
+
     protected void TakeDamage(int damage)
     {
         m_NumLives -= damage;
 
         if(m_NumLives <= 0)
         {
-            LevelSequenceController.Instance.FinishCurrentLevel(false);
+            m_NumLives = 0;
+            OnPlayerDead?.Invoke();
+            //LevelController.Instance.EndLevel(false);                        
         }
     }
         

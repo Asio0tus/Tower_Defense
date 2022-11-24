@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : Entity
 {
     [SerializeField] private float m_Velocity;
+    public float ProjectileSpeed => m_Velocity;
     [SerializeField] private float m_Lifetime;
     [SerializeField] private int m_Damage;
     [SerializeField] private ImpactEffect m_ImpactEffect;
@@ -24,7 +25,7 @@ public class Projectile : Entity
 
             if(dest != null && dest != m_Parent)
             {
-                dest.ApplyDamage(m_Damage);
+                ActivateDamage(dest);
                 /*
                 if(m_Parent != null && m_Parent == Player.Instance.ActiveShip)
                 {
@@ -54,6 +55,11 @@ public class Projectile : Entity
     public void SetParentShooter(Destructible parent)
     {
         m_Parent = parent;
+    }
+
+    protected virtual void ActivateDamage(Destructible dest)
+    {
+        dest.ApplyDamage(m_Damage);
     }
         
 }

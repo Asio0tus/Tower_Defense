@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -35,7 +36,12 @@ public class LevelController : SingletonBase<LevelController>
     /// <summary>
     /// Событие которое будет вызвано когда уровень будет выполнен. Вызывается один раз.
     /// </summary>
-    [SerializeField] private UnityEvent m_EventLevelCompleted;
+    [SerializeField] protected UnityEvent m_EventLevelCompleted;
+
+    /*public void EndLevel(bool levelResult)
+    {
+        LevelSequenceController.Instance.FinishCurrentLevel(levelResult);
+    }*/
 
     /// <summary>
     /// Массив условий для успешного прохождения уровня.
@@ -49,7 +55,7 @@ public class LevelController : SingletonBase<LevelController>
 
     #region Unity events
 
-    private void Start()
+    protected void Start()
     {
         m_Conditions = GetComponentsInChildren<ILevelCondition>();
     }

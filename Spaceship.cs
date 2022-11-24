@@ -28,6 +28,7 @@ public class Spaceship : Destructible
     /// Max line speed
     /// </summary>
     [SerializeField] private float m_MaxLinearVelocity;
+    public float ShipSpeed => m_MaxLinearVelocity;
 
     /// <summary>
     /// Max rotational speed. degrees per second
@@ -69,17 +70,17 @@ public class Spaceship : Destructible
 
     private void FixedUpdate()
     {
-        UpdateRigidBody();
-
         //UpdateEnergyRegen();
 
-        if(useSpeedBoost == true)
+        UpdateRigidBody();
+        
+        if(activateFreezing == true)
         {
             timerBoostSpeed -= Time.fixedDeltaTime;
 
-            if(timerBoostSpeed <= 0) OffSpeedBoost();
-
+            if(timerBoostSpeed <= 0) DeactivateFreezing();
         }
+        
     }
 
     #endregion
@@ -88,7 +89,7 @@ public class Spaceship : Destructible
     /// Method adding forces to move spaceship
     /// </summary>
     private void UpdateRigidBody()
-    {
+    {        
         m_Rigid.AddForce(ThrustControl * m_Thrust * transform.up * Time.fixedDeltaTime, ForceMode2D.Force);
 
         m_Rigid.AddForce(-m_Rigid.velocity * (m_Thrust / m_MaxLinearVelocity) * Time.fixedDeltaTime, ForceMode2D.Force);
@@ -145,25 +146,42 @@ public class Spaceship : Destructible
     #endregion
     */
 
-    private float startMaxLinearVelocity;
-    private bool useSpeedBoost = false;
+    private float startMaxLinearVelocity;    
+    private bool activateFreezing = false;
     private float timerBoostSpeed;
 
-    public void OnSpeedBoost(float value, float maxTimeUseBoost)
+    public void ActivateFreezing(float maxTimeUseBoost)
     {
-        startMaxLinearVelocity = m_MaxLinearVelocity;
-        timerBoostSpeed = maxTimeUseBoost;
-        useSpeedBoost = true;
+        if(activateFreezing == false) 
+        {
+            startMaxLinearVelocity = m_MaxLinearVelocity;
+           
+            timerBoostSpeed = maxTimeUseBoost;
+            activateFreezing = true;
 
-        m_MaxLinearVelocity += value;
+            var enemy = GetComponentInParent<Enemy>();
+            enemy.ChangeSpriteColor(Color.blue);
+
+            
+            m_MaxLinearVelocity = 0.3f;
+        }        
     }
 
-    private void OffSpeedBoost()
+    private void DeactivateFreezing()
     {
-        m_MaxLinearVelocity = startMaxLinearVelocity;
-        timerBoostSpeed = 0;
-        useSpeedBoost = false;
-                
+        if(activateFreezing == true)
+        {
+            timerBoostSpeed = 0;
+
+            var enemy = GetComponentInParent<Enemy>();
+            enemy.ChangeSpriteColor(enemy.SpriteColor);
+
+            m_MaxLinearVelocity = startMaxLinearVelocity;
+            
+
+            activateFreezing = false;
+        }      
+            
     }
 
     /// <summary>

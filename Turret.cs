@@ -8,6 +8,7 @@ public class Turret : MonoBehaviour
     public TurretMode Mode => m_Mode;
 
     [SerializeField] private TurretProperties m_TurretProperties;
+    public TurretProperties TurretProperties => m_TurretProperties;
 
     private float m_RefireTimer;
 
@@ -48,6 +49,8 @@ public class Turret : MonoBehaviour
         projectile.SetParentShooter(m_Ship);
 
         m_RefireTimer = m_TurretProperties.RateOfFire;
+
+        //Debug.Log("Fire");
 
         //SFX Audio
     }

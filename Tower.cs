@@ -8,6 +8,8 @@ public class Tower : MonoBehaviour
 
     private Turret[] turrets;
     private Destructible target = null;
+    private Spaceship targetShip;
+    private float projectileSpeed;
 
     public float Radius => m_Radius;
 
@@ -28,7 +30,7 @@ public class Tower : MonoBehaviour
             {
                 foreach (var turret in turrets)
                 {
-                    turret.transform.up = targetVector;
+                    turret.transform.up = SetLeadForTargetVector(turret, target);
                     turret.Fire();
                 }
             }
@@ -44,6 +46,7 @@ public class Tower : MonoBehaviour
             if (enter)
             {
                 target = enter.transform.root.GetComponent<Destructible>();
+                targetShip = enter.transform.root.GetComponent<Spaceship>();
             }
         }  
     }
@@ -52,5 +55,14 @@ public class Tower : MonoBehaviour
     {
         Gizmos.color = GizmoColor;
         Gizmos.DrawWireSphere(transform.position, m_Radius);
+    }
+
+    private Vector2 SetLeadForTargetVector(Turret turret, Destructible target)
+    {
+        //float projSpeed = turret.TurretProperties.ProjectilePrefab.ProjectileSpeed;
+        var tempo = targetShip.ShipSpeed * 0.5f;
+        Vector2 vector = (target.transform.position - transform.position) + (target.transform.up * tempo);
+        //Debug.Log(tempo);
+        return vector;
     }
 }

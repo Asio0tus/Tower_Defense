@@ -9,11 +9,15 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private int damage = 1;
     [SerializeField] private int gold = 1;
+    private SpriteRenderer sr;
+    private Color spriteColor;
+    public Color SpriteColor => spriteColor;
 
     public void Use(EnemyAsset asset)
     {
-        var sr = transform.Find("Sprite").GetComponent<SpriteRenderer>();
+        sr = transform.Find("Sprite").GetComponent<SpriteRenderer>();
         sr.color = asset.color;
+        spriteColor = sr.color;
         sr.transform.localScale = new Vector3(asset.spriteScale.x, asset.spriteScale.y, 1);
         sr.GetComponent<Animator>().runtimeAnimatorController = asset.animations;
 
@@ -34,6 +38,11 @@ public class Enemy : MonoBehaviour
     public void GivePlayerGold()
     {
         TDPlayer.Instance.ChangeGold(gold);
+    }
+
+    public void ChangeSpriteColor(Color newcolor)
+    {
+        sr.color = newcolor;
     }
 
 #if UNITY_EDITOR

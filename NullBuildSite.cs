@@ -7,6 +7,6 @@ public class NullBuildSite : BuildSite
 {
     public override void OnPointerDown(PointerEventData eventData)
     {
-        InvokeNullEvent();
+        HideBuyControls();
     }
 }

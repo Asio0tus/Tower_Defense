@@ -41,6 +41,7 @@ public class TDPlayer : Player
         {
             ChangeGold(-towerAsset.goldCost);
             BuildTower(buildSite.position, towerAsset.towerPrefab);
+            BuildSite.HideBuyControls();
             Destroy(buildSite.gameObject);
         }
         else return;

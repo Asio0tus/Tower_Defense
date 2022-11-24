@@ -10,19 +10,24 @@ public class BuyControl : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>();
 
-        BuildSite.OnClickEvent += MoveToTransform;
+        BuildSite.OnClickEvent += MoveToBuildSite;
 
         gameObject.SetActive(false);
     }
 
-    private void MoveToTransform(Transform target)
+    private void MoveToBuildSite(Transform buildSite)
     {
-        if (target)
+        if (buildSite)
         {
-            var position = Camera.main.WorldToScreenPoint(target.position);
+            var position = Camera.main.WorldToScreenPoint(buildSite.position);
 
             rectTransform.anchoredPosition = position;
             gameObject.SetActive(true);
+
+            foreach(var tbc in GetComponentsInChildren<TowerBuyControl>())
+            {
+                tbc.SetBuildSite(buildSite);
+            }
         }
         else
         {
