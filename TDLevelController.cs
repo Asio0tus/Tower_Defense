@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TDLevelController : LevelController
 {
+    public int levelScore => 1;
+
     private new void Start()
     {
         base.Start();
@@ -13,7 +15,13 @@ public class TDLevelController : LevelController
             LevelResultController.Instance.Show(false);
         };
 
-        m_EventLevelCompleted.AddListener(StopLevelActivity);
+        m_EventLevelCompleted.AddListener(() =>
+        {
+            StopLevelActivity();
+            MapCompletion.SaveEpisodeResult(levelScore);
+        });
+        
+        
     }
 
     private void StopLevelActivity()
