@@ -5,19 +5,34 @@ using UnityEngine;
 
 public class MapCompletion : SingletonBase<MapCompletion>
 {
+    public const string filename = "completion.dat";
+
+    public static void ResetSavedData()
+    {
+        FileHandler.Reset(filename);
+    }
+
     [Serializable]
     private class EpisodeScore
     {
         public Episode episode;
         public int score;
     }
+        
 
     public static void SaveEpisodeResult(int levelScore)
     {
         Instance.SaveResult(LevelSequenceController.Instance.CurrentEpisode, levelScore);
-    }
+    }  
+    
 
     [SerializeField] private EpisodeScore[] completionData;
+
+    private new void Awake()
+    {
+        base.Awake();
+        Saver<EpisodeScore[]>.TryLoad(filename, ref completionData);
+    }
 
     public bool TryIndex(int id, out Episode episode, out int score)
     {
@@ -41,7 +56,11 @@ public class MapCompletion : SingletonBase<MapCompletion>
         {
             if(item.episode == currentEpisode)
             {
-                if (result > item.score) item.score = result;                
+                if (result > item.score)
+                {
+                    item.score = result;
+                    Saver<EpisodeScore[]>.Save(filename, completionData);
+                }                
             }
         }
     }
