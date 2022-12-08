@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class MapLevel : MonoBehaviour
 {
     private Episode m_episode;
-    [SerializeField] private Text text;
+    [SerializeField] Image[] starsImages;
+    [SerializeField] Sprite starBlue;
+    //[SerializeField] private Text text;
 
     public void LoadLevel()
     {
@@ -16,6 +18,11 @@ public class MapLevel : MonoBehaviour
     public void SetLevelData(Episode episode, int score)
     {
         m_episode = episode;
-        text.text = $"{score} / 3";
+
+        for(int i = 0; i < score; i++)
+        {
+            starsImages[i].sprite = starBlue;
+        }
+        //text.text = $"{score} / 3";
     }
 }
