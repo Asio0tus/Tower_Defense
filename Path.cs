@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Path : MonoBehaviour
 {
+    [SerializeField] private CircleArea startArea;
+    public CircleArea StartArea => startArea;
+
     [SerializeField] private AIPatrolArea[] points;
     public int Length { get { return points.Length; } }
     public AIPatrolArea this[int i] { get => points[i]; }
