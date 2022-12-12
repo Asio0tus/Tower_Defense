@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
+using System;
 
 [RequireComponent(typeof(TDPatrolController))]
 public class Enemy : MonoBehaviour
@@ -12,6 +13,13 @@ public class Enemy : MonoBehaviour
     private SpriteRenderer sr;
     private Color spriteColor;
     public Color SpriteColor => spriteColor;
+
+    public event Action OnDead;
+
+    private void OnDestroy()
+    {        
+        OnDead?.Invoke();
+    }
 
     public void Use(EnemyAsset asset)
     {

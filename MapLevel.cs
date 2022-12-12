@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,21 @@ using UnityEngine.UI;
 
 public class MapLevel : MonoBehaviour
 {
-    private Episode m_episode;
-    [SerializeField] Image[] starsImages;
-    [SerializeField] Sprite starBlue;
-    //[SerializeField] private Text text;
+    [SerializeField] private Episode m_episode;
+    [SerializeField] private Image[] starsImages;
+    [SerializeField] private Sprite starBlue;
+    [SerializeField] private Button levelButton;
+    [SerializeField] private GameObject lockPanel;
+        
+
+    private int scoreResultLevel;
+        
+
+    public int ScoreResultLevel => scoreResultLevel;
+
+    private bool isComplete;
+    public bool IsComplete { get { return gameObject.activeSelf && isComplete; } }
+        
 
     public void LoadLevel()
     {
@@ -17,12 +29,29 @@ public class MapLevel : MonoBehaviour
 
     public void SetLevelData(Episode episode, int score)
     {
-        m_episode = episode;
+        print(episode.EpisodeName);
+        
+    }
 
-        for(int i = 0; i < score; i++)
+    public void Initialize()
+    {
+        scoreResultLevel = MapCompletion.Instance.GetEpisodeScore(m_episode);
+              
+        
+        for (int i = 0; i < scoreResultLevel; i++)
         {
             starsImages[i].sprite = starBlue;
+            isComplete = true;
         }
-        //text.text = $"{score} / 3";
     }
+
+    public void SetLevelLocked()
+    {
+        gameObject.SetActive(true);
+
+        lockPanel.SetActive(true);
+        levelButton.interactable = false;
+    }
+
+    
 }

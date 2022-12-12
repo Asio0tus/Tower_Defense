@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class NextWaveGUI : MonoBehaviour
 {
     private EnemyWavesManager wavesManager;
+    [SerializeField] Button buttonNextLevel;
 
     [SerializeField] private Text amountBonusText;
     private float timeToNextWave;
@@ -17,11 +18,14 @@ public class NextWaveGUI : MonoBehaviour
         {
             timeToNextWave = time;
         };
+
+        CheckButtonNextWaveToActive();
     }
 
     public void CallWave()
     {
         wavesManager.ForceNextWave();
+        CheckButtonNextWaveToActive();
     }
 
     private void Update()
@@ -31,9 +35,18 @@ public class NextWaveGUI : MonoBehaviour
             amountBonusText.text = ((int)timeToNextWave).ToString();
             timeToNextWave -= Time.deltaTime;
         }
-        else
+        
+        if(timeToNextWave <= 0 || wavesManager.CurrentWave == null)
         {
             amountBonusText.text = "0";
         }       
+    }
+
+    private void CheckButtonNextWaveToActive()
+    {
+        if (wavesManager.CurrentWave == null)
+        {
+            buttonNextLevel.interactable = false;
+        }
     }
 }

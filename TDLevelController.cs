@@ -68,6 +68,11 @@ public class TDLevelController : LevelController
         {
             tower.enabled = false;
         }
+
+        foreach (var GUI in FindObjectsOfType<NextWaveGUI>())
+        {
+            GUI.enabled = false;
+        }
     }
 
 }

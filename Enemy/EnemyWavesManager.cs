@@ -7,7 +7,12 @@ public class EnemyWavesManager : MonoBehaviour
 {
     [SerializeField] private Path[] paths;
     [SerializeField] private EnemyWave currentWave;
+    public EnemyWave CurrentWave => currentWave;
+
     [SerializeField] private Enemy m_EnemyPrefab;
+    private int activeEnemyCount = 0;
+
+    public event Action OnAllWavesDead;
 
     private void Start()
     {        
@@ -16,8 +21,18 @@ public class EnemyWavesManager : MonoBehaviour
 
     public void ForceNextWave()
     {
-        TDPlayer.Instance.ChangeGold((int)currentWave.GetRemaningTime());
-        SpawnEnemies();        
+        if (currentWave)
+        {
+            TDPlayer.Instance.ChangeGold((int)currentWave.GetRemaningTime());
+            SpawnEnemies();
+        }
+        else
+        {
+            if(activeEnemyCount == 0)
+            {
+                OnAllWavesDead?.Invoke();
+            }            
+        }
     }
 
     private void SpawnEnemies()
@@ -29,8 +44,10 @@ public class EnemyWavesManager : MonoBehaviour
                 for(int i = 0; i < count; i++)
                 {
                     var e = Instantiate(m_EnemyPrefab, paths[pathIndex].StartArea.GetRandomInsideZone(), Quaternion.identity);
+                    e.OnDead += RecordEnemyDead;
                     e.Use(asset);
                     e.GetComponent<TDPatrolController>().SetPath(paths[pathIndex]);
+                    activeEnemyCount++;                    
                 }
             }
             else
@@ -40,5 +57,15 @@ public class EnemyWavesManager : MonoBehaviour
         }
                 
         currentWave = currentWave.PrepareNextWave(SpawnEnemies);        
+    }
+
+    private void RecordEnemyDead()
+    {
+        activeEnemyCount--;
+
+        if(activeEnemyCount == 0)
+        {
+            ForceNextWave();
+        }
     }
 }

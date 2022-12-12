@@ -33,13 +33,14 @@ public class MapCompletion : SingletonBase<MapCompletion>
     }  
     
 
-    [SerializeField] private EpisodeScore[] completionData;
+    [SerializeField] private EpisodeScore[] completionData;    
 
     private new void Awake()
     {
         base.Awake();
         Saver<EpisodeScore[]>.TryLoad(filename, ref completionData);
     }
+    
 
     public bool TryIndex(int id, out Episode episode, out int score)
     {
@@ -55,6 +56,16 @@ public class MapCompletion : SingletonBase<MapCompletion>
             score = 0;
             return false;
         }
+    }
+
+    public int GetEpisodeScore(Episode m_episode)
+    {
+        foreach(var data in completionData)
+        {
+            if (data.episode == m_episode) return data.score;
+        }
+
+        return 0;
     }
 
     private void SaveResult(Episode currentEpisode, int result)
