@@ -11,12 +11,15 @@ public class Tower : MonoBehaviour
     private Spaceship targetShip;
     private float projectileSpeed;
 
+    public float accuracyCoefficient;
+
     public float Radius => m_Radius;
 
     private static readonly Color GizmoColor = new Color(1, 0, 0, 0.3f);
+        
 
     private void Start()
-    {
+    {        
         turrets = GetComponentsInChildren<Turret>();
     }
 
@@ -60,7 +63,7 @@ public class Tower : MonoBehaviour
     private Vector2 SetLeadForTargetVector(Turret turret, Destructible target)
     {
         //float projSpeed = turret.TurretProperties.ProjectilePrefab.ProjectileSpeed;
-        var tempo = targetShip.ShipSpeed * 0.5f;
+        var tempo = targetShip.ShipSpeed * accuracyCoefficient;
         Vector2 vector = (target.transform.position - transform.position) + (target.transform.up * tempo);
         //Debug.Log(tempo);
         return vector;

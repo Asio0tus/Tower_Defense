@@ -7,7 +7,7 @@ public class Projectile : Entity
     [SerializeField] private float m_Velocity;
     public float ProjectileSpeed => m_Velocity;
     [SerializeField] private float m_Lifetime;
-    [SerializeField] private int m_Damage;
+    [SerializeField] protected int m_Damage;
     [SerializeField] private ImpactEffect m_ImpactEffect;
     private float m_Timer;
 
@@ -21,18 +21,7 @@ public class Projectile : Entity
 
         if (hit)
         {
-            Destructible dest = hit.collider.transform.root.GetComponent<Destructible>();
-
-            if(dest != null && dest != m_Parent)
-            {
-                ActivateDamage(dest);
-                /*
-                if(m_Parent != null && m_Parent == Player.Instance.ActiveShip)
-                {
-                    Player.Instance.AddScore(dest.ScoreValue);
-                }
-                */
-            }
+            OnHit(hit);
 
             OnProjectileLifeEnd(hit.collider, hit.point);
         }
@@ -45,7 +34,27 @@ public class Projectile : Entity
         transform.position += new Vector3(step.x, step.y, 0);
     }
 
-    private void OnProjectileLifeEnd(Collider2D col, Vector2 pos)
+
+    
+
+
+        protected virtual void OnHit(RaycastHit2D hit)
+        {
+            Destructible dest = hit.collider.transform.root.GetComponent<Destructible>();
+
+            if (dest != null && dest != m_Parent)
+            {
+                ActivateDamage(dest);
+
+                /*if(m_Parent != null && m_Parent == Player.Instance.ActiveShip)
+                {
+                    Player.Instance.AddScore(dest.ScoreValue);
+                }*/
+
+            }
+        }
+
+        private void OnProjectileLifeEnd(Collider2D col, Vector2 pos)
     {
         Destroy(gameObject);
     }

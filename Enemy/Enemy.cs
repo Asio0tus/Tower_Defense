@@ -5,16 +5,56 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using System;
 
+[RequireComponent(typeof(Destructible))]
 [RequireComponent(typeof(TDPatrolController))]
 public class Enemy : MonoBehaviour
 {
+    public enum ArmorType
+    {
+        Base = 0,
+        Magic = 1
+    }
+
     [SerializeField] private int damage = 1;
     [SerializeField] private int gold = 1;
+    [SerializeField] private int armor = 0;
+    [SerializeField] private ArmorType armorType;
+
+    private Destructible destructible;
+
     private SpriteRenderer sr;
     private Color spriteColor;
     public Color SpriteColor => spriteColor;
 
     public event Action OnDead;
+
+    private static Func<int, TDProjectile.DamageType, int, int>[] ArmorDamageFunctions =
+    {
+        //ArmorType.Base
+        (int damage, TDProjectile.DamageType damageType, int armor) =>
+        {            
+            switch (damageType)
+            {
+                case TDProjectile.DamageType.Base: return Mathf.Max(damage - armor, 1);
+                default: return damage;                
+            }            
+        },
+
+        //ArmorType.Magic
+        (int damage, TDProjectile.DamageType damageType, int armor) =>
+        {
+            switch (damageType)
+            {
+                case TDProjectile.DamageType.Magic: return damage / 2;
+                default: return damage;
+            }
+        }
+    };
+
+    private void Awake()
+    {
+        destructible = GetComponent<Destructible>();
+    }
 
     private void OnDestroy()
     {        
@@ -36,6 +76,8 @@ public class Enemy : MonoBehaviour
 
         damage = asset.damage;
         gold = asset.gold;
+        armor = asset.armor;
+        armorType = asset.armorType;
     }
 
     public void DamagePlayer()
@@ -51,6 +93,11 @@ public class Enemy : MonoBehaviour
     public void ChangeSpriteColor(Color newcolor)
     {
         sr.color = newcolor;
+    }
+
+    public void TakeDamage(int damage, TDProjectile.DamageType damageType)
+    {
+        destructible.ApplyDamage(ArmorDamageFunctions[(int)armorType](damage, damageType, armor));
     }
 
 #if UNITY_EDITOR

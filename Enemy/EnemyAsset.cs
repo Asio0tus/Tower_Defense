@@ -17,8 +17,10 @@ public sealed class EnemyAsset : ScriptableObject
     [Header("Enemyes options")]
     public float moveSpeed = 1;
     public int hitpoints = 10;
+    public int armor = 0;
     public int score = 10;
     public float colliderRadius = 0.28f;
     public int damage = 1;
     public int gold = 1;
+    public Enemy.ArmorType armorType;
 }

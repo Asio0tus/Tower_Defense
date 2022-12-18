@@ -33,12 +33,20 @@ public class MapCompletion : SingletonBase<MapCompletion>
     }  
     
 
-    [SerializeField] private EpisodeScore[] completionData;    
+    [SerializeField] private EpisodeScore[] completionData;
+
+    private int totalScore;
+    public int TotalScore => totalScore;
 
     private new void Awake()
     {
         base.Awake();
         Saver<EpisodeScore[]>.TryLoad(filename, ref completionData);
+
+        foreach(var episodeScore in completionData)
+        {
+            totalScore += episodeScore.score;
+        }
     }
     
 

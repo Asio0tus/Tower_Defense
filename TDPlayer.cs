@@ -12,6 +12,8 @@ public class TDPlayer : Player
     public static event Action<int> OnGoldUpdate;
     public static event Action<int> OnHealthUpdate;
 
+       
+
     private void Start()
     {
         OnGoldUpdate(m_gold);

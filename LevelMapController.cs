@@ -37,7 +37,7 @@ public class LevelMapController : MonoBehaviour
         for (int i = 0; i < mapLevels.Length; i++)
         {
             mapLevels[i].gameObject.SetActive(true);
-            mapLevels[drawLevel].Initialize();
+            mapLevels[i].Initialize();
             
             if(i > 0)
             {
