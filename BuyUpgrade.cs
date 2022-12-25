@@ -47,6 +47,7 @@ public class BuyUpgrade : MonoBehaviour
 
         if (asset.costUpgrade[savedLevel] > money)
         {
+            //print(asset.costUpgrade[savedLevel]);
             buttonBuyUpgrade.interactable = false;
         }        
     }

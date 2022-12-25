@@ -11,16 +11,22 @@ public class UpgradesSaver : SingletonBase<UpgradesSaver>
     [Serializable]
     private class UpgradeSave
     {      
-        public UpgradeAsset asset;
+        public string assetName;
         public int level = 0;
     }
 
     [SerializeField] private UpgradeSave[] upgradeSaves;
+    [SerializeField] private UpgradeAsset[] upgradeAssets;
 
     private new void Awake()
     {
         base.Awake();
-        Saver<UpgradeSave[]>.TryLoad(filename, ref upgradeSaves);
+        Saver<UpgradeSave[]>.TryLoad(filename, ref upgradeSaves);       
+        
+        for (int i = 0; i < upgradeAssets.Length; i++)
+        {
+            upgradeSaves[i].assetName = upgradeAssets[i].assetName;
+        }        
     }
 
 
@@ -28,8 +34,8 @@ public class UpgradesSaver : SingletonBase<UpgradesSaver>
     {
         foreach (var upgrade in Instance.upgradeSaves)
         {
-            if(upgrade.asset == upgradeAsset)
-            {
+            if(upgrade.assetName == upgradeAsset.assetName)            
+            {               
                 upgrade.level += 1;
                 Saver<UpgradeSave[]>.Save(filename, Instance.upgradeSaves);
             }
@@ -40,12 +46,24 @@ public class UpgradesSaver : SingletonBase<UpgradesSaver>
     {
         foreach (var upgrade in Instance.upgradeSaves)
         {
-            if (upgrade.asset == upgradeAsset)
+            if (upgrade.assetName == upgradeAsset.assetName)
             {
                 return upgrade.level;
             }
         }
 
+        return 0;
+    }
+
+    public int GetCostUpgradeLevel(string assetName, int level)
+    {
+        foreach(var asset in upgradeAssets)
+        {
+            if(assetName == asset.assetName)
+            {
+                return asset.costUpgrade[level];
+            }
+        }
         return 0;
     }
 
@@ -57,7 +75,7 @@ public class UpgradesSaver : SingletonBase<UpgradesSaver>
         {
             for(int i = 0; i < upgrade.level; i++)
             {
-                result += upgrade.asset.costUpgrade[i];
+                result += Instance.GetCostUpgradeLevel(upgrade.assetName, i);
             }
         }
 

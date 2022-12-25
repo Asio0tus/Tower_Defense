@@ -15,7 +15,8 @@ public class MapCompletion : SingletonBase<MapCompletion>
     [Serializable]
     private class EpisodeScore
     {
-        public Episode episode;
+        //public Episode episode;
+        public string episodeName;
         public int score;
     }
         
@@ -24,7 +25,7 @@ public class MapCompletion : SingletonBase<MapCompletion>
     {
         if (Instance)
         {
-            Instance.SaveResult(LevelSequenceController.Instance.CurrentEpisode, levelScore);
+            Instance.SaveResult(LevelSequenceController.Instance.CurrentEpisode.EpisodeName, levelScore);
         }
         else
         {
@@ -43,24 +44,33 @@ public class MapCompletion : SingletonBase<MapCompletion>
         base.Awake();
         Saver<EpisodeScore[]>.TryLoad(filename, ref completionData);
 
-        foreach(var episodeScore in completionData)
+        Episode[] episodes = FindObjectsOfType<Episode>();
+
+        for(int i = 0; i < episodes.Length; i++)
+        {
+            completionData[i].episodeName = episodes[i].EpisodeName;
+        }
+
+        //print("score awake " + completionData[0].score);
+
+        foreach (var episodeScore in completionData)
         {
             totalScore += episodeScore.score;
         }
     }
     
 
-    public bool TryIndex(int id, out Episode episode, out int score)
+    public bool TryIndex(int id, out string episodeName, out int score)
     {
         if(id >= 0 && id < completionData.Length)
         {
-            episode = completionData[id].episode;
+            episodeName = completionData[id].episodeName;
             score = completionData[id].score;
             return true;
         }
         else
         {
-            episode = null;
+            episodeName = null;
             score = 0;
             return false;
         }
@@ -68,19 +78,36 @@ public class MapCompletion : SingletonBase<MapCompletion>
 
     public int GetEpisodeScore(Episode m_episode)
     {
-        foreach(var data in completionData)
+        /*foreach (var data in completionData)
         {
             if (data.episode == m_episode) return data.score;
-        }
+        }*/
+                
+        int score = 0;
 
-        return 0;
+        print("1level=  " + m_episode);
+
+        for (int i = 0; i < completionData.Length; i++)
+        {
+            print(completionData[i].episodeName + " == " + completionData[i].score);
+            
+            if (completionData[i].episodeName == m_episode.EpisodeName) // ÓÑËÎÂÈÅ ÍÅ ÂÛÏÎËÍßÅÒÑß ÁÅÇ ÏÅÐÅÇÀÏÈÑÈ ÑÝÉÂ ÔÀÉËÀ
+            {
+                score = completionData[i].score;
+                //print("score " + score);
+            }
+        }        
+
+        return score;        
     }
 
-    private void SaveResult(Episode currentEpisode, int result)
+    private void SaveResult(string currentEpisodeName, int result)
     {
+        print(currentEpisodeName + "   " + result);
+
         foreach (var item in completionData)
-        {
-            if(item.episode == currentEpisode)
+        {           
+            if(item.episodeName == currentEpisodeName)
             {
                 if (result > item.score)
                 {

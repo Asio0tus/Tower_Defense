@@ -20,7 +20,7 @@ public class Tower : MonoBehaviour
 
     private void Start()
     {        
-        turrets = GetComponentsInChildren<Turret>();
+        turrets = GetComponentsInChildren<Turret>();        
     }
 
     private void Update()
@@ -67,5 +67,12 @@ public class Tower : MonoBehaviour
         Vector2 vector = (target.transform.position - transform.position) + (target.transform.up * tempo);
         //Debug.Log(tempo);
         return vector;
+    }
+
+    public void SetBuilPlacesTowerAsset(TowerAsset asset)
+    {
+        var buildSite = GetComponentInChildren<BuildSite>();
+        if (buildSite) buildSite.SetTowerAssetToBuild(asset.UpgradesTo);
+        Debug.Log("SetBuilPlacesTowerAsset" + asset);        
     }
 }

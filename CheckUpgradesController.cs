@@ -3,22 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class CheckUpgrades : MonoBehaviour
+public class CheckUpgradesController : SingletonBase<CheckUpgradesController>
 {
     [Header("UpgradeAssets")]
     [SerializeField] private UpgradeAsset healthUpgrade;
     [SerializeField] private UpgradeAsset goldUpgrade;
     [SerializeField] private UpgradeAsset buildPlaceUpgrade;
     [SerializeField] private UpgradeAsset accuracyUpgrade;
+    [SerializeField] private UpgradeAsset fireSpellUpgrade;
+    [SerializeField] private UpgradeAsset freezSpellUpgrade;
+    
+
 
     [Header("Other links")]
     [SerializeField] private GameObject bonusBuildPlace;
+    [SerializeField] private GameObject fireSpellButton;
+    [SerializeField] private GameObject freezSpellButton;
     [SerializeField] private Tower[] towersPrefabs;
-    [SerializeField] private Tower[] towersOnScene;
-
+    [SerializeField] private Tower[] towersOnScene; 
+    
     [SerializeField] private float bonusAccuracyCoefficient;
     [SerializeField] private float baseAccuracyCoefficient;
 
+
+    
 
     private void Start()
     {
@@ -32,7 +40,7 @@ public class CheckUpgrades : MonoBehaviour
         bonusBuildPlace.SetActive(levelbuildPlaceUpgrade > 0);
 
         int levelAccuracyUpgrade = UpgradesSaver.GetUpgradeLevel(accuracyUpgrade);
-        towersOnScene = FindObjectsOfType<Tower>();
+        towersOnScene = FindObjectsOfType<Tower>();       
 
         foreach (Tower tower in towersPrefabs)
         {
@@ -50,10 +58,27 @@ public class CheckUpgrades : MonoBehaviour
                 tower.accuracyCoefficient = baseAccuracyCoefficient;
         }
 
-        Debug.Log(levelHPUpgrade);
-        Debug.Log(levelGoldUpgrade);
-        Debug.Log(levelbuildPlaceUpgrade);
-        Debug.Log(levelAccuracyUpgrade);
+        int levelFireSpellUpgrade = UpgradesSaver.GetUpgradeLevel(fireSpellUpgrade);
+        if(levelFireSpellUpgrade > 0)
+        {
+            fireSpellButton.SetActive(true);
+            Abilities.Instance.ChangeFireCoolDownTimeUpgrade(levelFireSpellUpgrade);
+        }
+        else
+        {
+            fireSpellButton.SetActive(false);
+        }
+
+        int levelFreezSpellUpgrade = UpgradesSaver.GetUpgradeLevel(freezSpellUpgrade);
+        if (levelFreezSpellUpgrade > 0)
+        {
+            freezSpellButton.SetActive(true);
+            Abilities.Instance.ChangeFreezCoolDownTimeUpgrade(levelFreezSpellUpgrade);
+        }
+        else
+        {
+            freezSpellButton.SetActive(false);
+        }
     }
 
 }

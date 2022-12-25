@@ -8,7 +8,8 @@ public class TextUpdate : MonoBehaviour
     public enum UpdateSourse
     {
         Gold,
-        Health
+        Health,
+        Mana
     }
 
     public UpdateSourse sourse = UpdateSourse.Gold;
@@ -30,6 +31,9 @@ public class TextUpdate : MonoBehaviour
             case UpdateSourse.Health:
                 TDPlayer.OnHealthUpdate += UpdateText;
                 break;
+            case UpdateSourse.Mana:
+                TDPlayer.OnManaUpdate += UpdateText;
+                break;
         }
         
     }
@@ -38,5 +42,21 @@ public class TextUpdate : MonoBehaviour
     {
         text.text = sourseValue.ToString();
     }
-    
+
+    private void OnDestroy()
+    {
+        switch (sourse)
+        {
+            case UpdateSourse.Gold:
+                TDPlayer.OnGoldUpdate -= UpdateText;
+                break;
+            case UpdateSourse.Health:
+                TDPlayer.OnHealthUpdate -= UpdateText;
+                break;
+            case UpdateSourse.Mana:
+                TDPlayer.OnManaUpdate -= UpdateText;
+                break;
+        }
+    }
+
 }

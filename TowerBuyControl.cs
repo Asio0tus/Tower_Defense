@@ -23,7 +23,7 @@ public class TowerBuyControl : MonoBehaviour
         button.GetComponent<Image>().sprite = towerAsset.towerGUI;
     }
 
-    private void GoldStatusCheck(int gold)
+    public void GoldStatusCheck(int gold)
     {
         if(gold >= towerAsset.goldCost != button.interactable)
         {
@@ -43,5 +43,13 @@ public class TowerBuyControl : MonoBehaviour
         buildSite = buildSiteTransform;
     }
 
-    
+    public void SetTowerBuyControlAsset(TowerAsset newtowerAsset)
+    {
+        towerAsset = newtowerAsset;
+    }
+
+    private void OnDestroy()
+    {
+        TDPlayer.OnGoldUpdate -= GoldStatusCheck;
+    }
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class EnemyWavesManager : MonoBehaviour
 {
+    public static event Action<Enemy> OnEnemySpawn;
+
     [SerializeField] private Path[] paths;
     [SerializeField] private EnemyWave currentWave;
     public EnemyWave CurrentWave => currentWave;
@@ -47,7 +49,8 @@ public class EnemyWavesManager : MonoBehaviour
                     e.OnDead += RecordEnemyDead;
                     e.Use(asset);
                     e.GetComponent<TDPatrolController>().SetPath(paths[pathIndex]);
-                    activeEnemyCount++;                    
+                    activeEnemyCount++;
+                    OnEnemySpawn?.Invoke(e);
                 }
             }
             else

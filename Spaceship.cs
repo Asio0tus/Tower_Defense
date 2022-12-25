@@ -28,7 +28,14 @@ public class Spaceship : Destructible
     /// Max line speed
     /// </summary>
     [SerializeField] private float m_MaxLinearVelocity;
+    private float m_MaxLinearVelocityBackup;
     public float ShipSpeed => m_MaxLinearVelocity;
+    public void HalfMaxLinearVelosity() 
+    { 
+        m_MaxLinearVelocityBackup = m_MaxLinearVelocity; 
+        m_MaxLinearVelocity = 0.3f; 
+    }
+    public void RestoreMaxLinearVelosity() { m_MaxLinearVelocity = m_MaxLinearVelocityBackup; }
 
     /// <summary>
     /// Max rotational speed. degrees per second

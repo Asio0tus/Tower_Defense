@@ -36,8 +36,9 @@ public class MapLevel : MonoBehaviour
     public void Initialize()
     {
         scoreResultLevel = MapCompletion.Instance.GetEpisodeScore(m_episode);
-              
-        
+
+        //print("score " + scoreResultLevel);
+
         for (int i = 0; i < scoreResultLevel; i++)
         {
             starsImages[i].sprite = starBlue;
